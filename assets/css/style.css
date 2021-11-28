@@ -11,6 +11,10 @@
     align-items: flex-end;
 }
 
+pre {
+	display: inline;
+}
+
 /* Table */
 .tg {
 	border-collapse: collapse;
