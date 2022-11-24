@@ -8,5 +8,5 @@
 
 [Youtube](https://www.youtube.com/channel/UCUwcJ5V5F7eGZUbEq3vV-WA): Jonius7
 
-[Minecraft](https://jonius7.github.io) - I have bugfixes and updates for Minecraft mods
+[Minecraft](https://www.youtube.com/watch?v=q16iqgbWRUE) - I have bugfixes and updates for Minecraft mods
 
