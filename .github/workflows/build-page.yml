@@ -23,7 +23,7 @@ jobs:
           node-version: 22.x
           cache: npm
 
-      - name: Build
+      - name: Build and export
         run: |
           npm ci
           npm run build

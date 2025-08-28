@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "build-data": "node scripts/fetch_mods.js"
+    "export": "next export"    
   },
   "dependencies": {
     "fs": "^0.0.1-security",
