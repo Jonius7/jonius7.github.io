@@ -100,14 +100,12 @@ export default function Home() {
     if (!dateString) return "No release";
     const date = new Date(dateString);
     const now = new Date();
-
     const diffMs = now - date;
     const diffSec = Math.floor(diffMs / 1000);
     const diffMin = Math.floor(diffSec / 60);
     const diffHours = Math.floor(diffMin / 60);
     const diffDays = Math.floor(diffHours / 24);
     const diffWeeks = Math.floor(diffDays / 7);
-
     const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
     if (diffWeeks > 6) return rtf.format(-diffWeeks, "week");
     if (diffDays > 0) return rtf.format(-diffDays, "day");
