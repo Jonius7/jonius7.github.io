@@ -1,3 +1,17 @@
+# Welcome to the Jonius7 Website!
+
+### View at [jonius7.github.io](https://jonius7.github.io)
+
+------
+
+[SteamUI-OldGlory](https://github.com/Jonius7/SteamUI-OldGlory) - A set of tweaks to the Steam Library UI
+
+[Youtube](https://www.youtube.com/channel/UCUwcJ5V5F7eGZUbEq3vV-WA): Jonius7
+
+[Minecraft](https://www.youtube.com/watch?v=q16iqgbWRUE) - I have bugfixes and updates for Minecraft mods
+
+------
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
