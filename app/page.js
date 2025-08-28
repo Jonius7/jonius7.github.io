@@ -74,15 +74,14 @@ export default function Home() {
             const releases = await res.json();
             const latest = releases.find(r => !r.prerelease) || null;
 
-            let validAsset = null;
-            if (latest && latest.assets && latest.assets.length > 0) {
-              validAsset = latest.assets.find(a => !a.name.includes("-api")) || null;
-            }
+            if (!latest) return { ...repo, latestVersion: "No release", releaseDate: null, assets: [] };
+
+            const validAsset = latest.assets.find(a => !a.name.includes("-api")) || null;
 
             return {
               ...repo,
-              latestVersion: latest ? latest.tag_name : "No release",
-              releaseDate: latest ? latest.published_at : null,
+              latestVersion: latest.tag_name,
+              releaseDate: latest.published_at,
               assets: validAsset ? [validAsset] : [],
             };
           } catch (err) {
