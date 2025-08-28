@@ -1,6 +1,7 @@
-import Link from "next/link";
+"use client";
 
-// static repo list
+import { useEffect, useState } from "react";
+
 const author = "Jonius7";
 const table = [
   { name: "MoreBackpacks", originalVersion: "2.2.2", changes: "Updated outdated Forestry API causing crashes", originalAuthor: "Enosphorous, LordBlackHole" },
@@ -57,44 +58,62 @@ const table = [
   },
 ];
 
-export default async function Home() {
-  // fetch data for all repos
-  const data = await Promise.all(
-    table.map(async (repo) => {
-      const repoName = repo.repo || repo.name;
+export default function Home() {
+  const [data, setData] = useState([]);
 
-      // Fetch repo info
-      const repoRes = await fetch(`https://api.github.com/repos/${author}/${repoName}`, {
-        headers: { Authorization: `token ${process.env.GITHUB_TOKEN}` },
-        next: { revalidate: 3600 },
-      });
-      const repoJson = await repoRes.json();
+  useEffect(() => {
+    async function fetchReleases() {
+      const newData = await Promise.all(
+        table.map(async (repo) => {
+          const repoName = repo.repo || repo.name;
 
-      // Fetch latest release
-      let relJson = {};
-      try {
-        const relRes = await fetch(`https://api.github.com/repos/${author}/${repoName}/releases/latest`, {
-          headers: { Authorization: `token ${process.env.GITHUB_TOKEN}` },
-          next: { revalidate: 3600 },
-        });
-        if (relRes.ok) {
-          relJson = await relRes.json();
-        } else {
-          relJson = { assets: [], tag_name: null, published_at: null };
-        }
-      } catch (err) {
-        relJson = { assets: [], tag_name: null, published_at: null };
-      }
-      
-      return {
-        ...repo,
-        description: repoJson.description || "",
-        latestVersion: relJson.tag_name || "No release",
-        releaseDate: relJson.published_at || null,
-        assets: relJson.assets || [],
-      };
-    })
-  );
+          try {
+            const res = await fetch(`https://api.github.com/repos/${author}/${repoName}/releases`);
+            if (!res.ok) return { ...repo, latestVersion: "No release", releaseDate: null, assets: [] };
+
+            const releases = await res.json();
+            const latest = releases.find(r => !r.prerelease) || null;
+
+            if (!latest) return { ...repo, latestVersion: "No release", releaseDate: null, assets: [] };
+
+            const validAsset = latest.assets.find(a => !a.name.includes("-api")) || null;
+
+            return {
+              ...repo,
+              latestVersion: latest.tag_name,
+              releaseDate: latest.published_at,
+              assets: validAsset ? [validAsset] : [],
+            };
+          } catch (err) {
+            return { ...repo, latestVersion: "No release", releaseDate: null, assets: [] };
+          }
+        })
+      );
+      setData(newData);
+    }
+
+    fetchReleases();
+  }, []);
+
+  function formatRelativeDate(dateString) {
+    if (!dateString) return "No release";
+    const date = new Date(dateString);
+    const now = new Date();
+
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHours = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    const diffWeeks = Math.floor(diffDays / 7);
+
+    const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+    if (diffWeeks > 6) return rtf.format(-diffWeeks, "week");
+    if (diffDays > 0) return rtf.format(-diffDays, "day");
+    if (diffHours > 0) return rtf.format(-diffHours, "hour");
+    if (diffMin > 0) return rtf.format(-diffMin, "minute");
+    return "just now";
+  }
 
   return (
     <>
@@ -112,8 +131,8 @@ export default async function Home() {
           <p className="centered-p">
             &emsp;Latest Version:&nbsp;
             <img
-              alt="GitHub release (latest by date including pre-releases)"
-              src="https://img.shields.io/github/v/release/Jonius7/SteamUI-OldGlory?display_name=release&include_prereleases&label=%20%20&style=flat-square"
+              alt="GitHub release (latest by date)"
+              src="https://img.shields.io/github/v/release/Jonius7/SteamUI-OldGlory?display_name=release&label=%20%20&style=flat-square"
               height="27"
             />
           </p>
@@ -133,7 +152,7 @@ export default async function Home() {
           </p>
 
           <p>
-            <Link href="/minecraft">Keeping Minecraft Mods Updated</Link>{" "}
+            <a href="/minecraft">Keeping Minecraft Mods Updated</a>{" "}
             - Building a modpack, can use a table format to check when mods are updating
           </p>
 
@@ -169,7 +188,7 @@ export default async function Home() {
                   <td>
                     {!mod.noBadge && (
                       <img
-                        src={`https://img.shields.io/github/v/release/${author}/${mod.repo || mod.name}?display_name=release&include_prereleases&label=%20&style=flat-square`}
+                        src={`https://img.shields.io/github/v/release/${author}/${mod.repo || mod.name}?display_name=release&label=%20&style=flat-square`}
                         height="27"
                       />
                     )}
@@ -178,17 +197,10 @@ export default async function Home() {
                   <td dangerouslySetInnerHTML={{ __html: mod.changes }} />
                   <td dangerouslySetInnerHTML={{ __html: mod.originalAuthor }} />
                   <td>
-                    {mod.assets && mod.assets.length > 0 ? (
-                      (() => {
-                        const validAsset = mod.assets.find(asset => !asset.name.includes("-api"));
-                        return validAsset ? (
-                          <a href={validAsset.browser_download_url} target="_blank" rel="noopener noreferrer">
-                            Download
-                          </a>
-                        ) : (
-                          "No release"
-                        );
-                      })()
+                    {mod.assets.length > 0 ? (
+                      <a href={mod.assets[0].browser_download_url} target="_blank" rel="noopener noreferrer">
+                        Download
+                      </a>
                     ) : (
                       "No release"
                     )}
