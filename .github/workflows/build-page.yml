@@ -6,33 +6,33 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "0 0 * * *" # optional: run daily at midnight UTC to update releases automatically
+    - cron: "0 0 * * *" # optional: daily update
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
+      # 1. Checkout repo
       - uses: actions/checkout@v3
         with:
           persist-credentials: true
 
-      # Setup Node.js
+      # 2. Setup Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: 22.x
           cache: 'npm'
 
-      # Install dependencies
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # Fetch latest release data
+      # 4. Fetch latest release data
       - name: Fetch releases
         run: node fetchReleases.js
 
-      # Commit updated data.json back to main
+      # 5. Commit updated data.json (optional)
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
@@ -43,17 +43,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Build and export static site
+      # 6. Build and export static site
       - name: Build and export
         run: |
-          cp data.json out/data.json
           npm run build
-          npx next export          
+          npm run export
+          # copy data.json into out/ so GitHub Pages can access it
+          cp data.json out/data.json
+          # prevent GitHub Pages from ignoring files starting with _
           touch out/.nojekyll
 
-      # Deploy to GitHub Pages
+      # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: out
+          clean: true
