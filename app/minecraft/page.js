@@ -37,7 +37,6 @@ function formatRelativeDate(dateString) {
   return "just now";
 }
 
-
 export default async function Home() {
   const data = await Promise.all(
     repos.map(async (repo) => {
@@ -63,6 +62,32 @@ export default async function Home() {
       };
     })
   );
+
+  // --- Fetch CurseForge mods ---
+  /*let curseData = [];
+  try {
+    const cfRes = await fetch(
+      "https://api.curseforge.com/v1/mods/search?gameId=432&index=0&pageSize=20",
+      {
+        headers: {
+          Accept: "application/json",
+          "x-api-key": "process.env.CURSEFORGE_API_KEY || """,
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (cfRes.ok) {
+      curseData = await cfRes.json();
+      console.log(curseData);
+    } else {
+      const text = await cfRes.text();
+      console.error("CurseForge API error:", cfRes.status, text);
+    }
+  } catch (err) {
+    console.error("CurseForge fetch error:", err);
+  }*/
+
 
   return (
     <div className="base">
@@ -111,6 +136,11 @@ export default async function Home() {
           </tbody>
         </table>
       </div>
+      <footer>
+        <div className="content">
+          <Link href="../" rel="noopener noreferrer">Back to Home</Link>
+        </div>
+      </footer>
     </div>
   );
 }
