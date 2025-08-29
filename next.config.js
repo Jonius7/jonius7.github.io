@@ -17,5 +17,6 @@ module.exports = {
   basePath: basePath,
   output: 'export', // enables next export
   basePath: '/jonius7.github.io', // replace with your repo name
+  assetPrefix: '/jonius7.github.io/',
   trailingSlash: true, // optional, better for static hosting
 }

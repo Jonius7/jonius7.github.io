@@ -1,15 +1,12 @@
-name: Build and Deploy
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main ]
-  schedule:
-    - cron: "0 0 * * *"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
@@ -21,14 +18,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Fetch releases
-        run: node fetchReleases.js
-
       - name: Build and export
         run: |
           npm run build
           npm run export
-          cp data.json out/data.json
           touch out/.nojekyll
 
       - name: Deploy to GitHub Pages
