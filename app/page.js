@@ -1,6 +1,6 @@
 "use client";
 
-import releasesData from '../.data.json';
+import releasesData from './data.json';
 
 export default function Home() {
   const data = releasesData;
