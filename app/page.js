@@ -35,6 +35,7 @@ export default async function Home() {
         ...repo,
         description: repoJson.description,
         status: relRes.status,
+        assets: relRes.assets,
         latestVersion: relJson.tag_name,
         releaseDate: relJson.published_at,
       };
