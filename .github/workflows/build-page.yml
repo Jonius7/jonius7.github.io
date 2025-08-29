@@ -46,9 +46,9 @@ jobs:
       # Build and export static site
       - name: Build and export
         run: |
-          npm run build
-          npx next export
           cp data.json out/data.json
+          npm run build
+          npx next export          
           touch out/.nojekyll
 
       # Deploy to GitHub Pages
