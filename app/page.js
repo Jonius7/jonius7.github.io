@@ -1,3 +1,6 @@
+
+import Link from "next/link"
+
 const author = "Jonius7";
 const table = [
   { name: "MoreBackpacks", originalVersion: "2.2.2", changes: "Updated outdated Forestry API causing crashes", originalAuthor: "Enosphorous, LordBlackHole" },
@@ -68,7 +71,7 @@ export default async function Home() {
         </p>
 
         <p>
-          <a href="/minecraft">Keeping Minecraft Mods Updated</a> - Building a modpack, can use a table format to check when mods are updating
+          <Link href="/minecraft">Keeping Minecraft Mods Updated</Link> - Building a modpack, can use a table format to check when mods are updating
         </p>
 
         <table className="tg">
@@ -86,7 +89,7 @@ export default async function Home() {
             {data.map((mod, i) => (
               <tr key={i}>
                 <td>
-                  <a href={mod.provider === "CurseForge" ? mod.link : mod.repo ? `https://github.com/${author}/${mod.repo}` : `https://github.com/${author}/${mod.name}`} target="_blank" rel="noopener noreferrer">
+                  <a href={`https://github.com/${author}/${mod.name || mod.repo}`} target="_blank" rel="noopener noreferrer">
                     {mod.name}
                   </a>
                 </td>

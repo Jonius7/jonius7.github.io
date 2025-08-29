@@ -3,20 +3,21 @@
 const isGithubActions = process.env.GITHUB_ACTIONS || false
 
 let assetPrefix = ''
-let basePath = '/'
+let basePath = ''
 
 if (isGithubActions) {
   const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '')
 
-  assetPrefix = `/${repo}/`
-  basePath = `/${repo}`
+  // If deploying to <username>.github.io (root), leave them empty
+  if (repo !== `${process.env.GITHUB_REPOSITORY.split('/')[0]}.github.io`) {
+    assetPrefix = `/${repo}/`
+    basePath = `/${repo}`
+  }
 }
 
 module.exports = {
-  assetPrefix: assetPrefix,
-  basePath: basePath,
-  output: 'export', // enables next export
-  basePath: '/jonius7.github.io', // replace with your repo name
-  assetPrefix: '/jonius7.github.io/',
-  trailingSlash: true, // optional, better for static hosting
+  assetPrefix,
+  basePath,
+  output: 'export',      // required for npm run export
+  trailingSlash: true,   // good for static hosting
 }
