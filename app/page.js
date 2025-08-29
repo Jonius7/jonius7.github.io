@@ -34,8 +34,8 @@ export default async function Home() {
       return {
         ...repo,
         description: repoJson.description,
-        status: relRes.status,
-        assets: relRes.assets,
+        status: relJson.status,
+        assets: relJson.assets,
         latestVersion: relJson.tag_name,
         releaseDate: relJson.published_at,
       };
@@ -105,9 +105,11 @@ export default async function Home() {
                 <td dangerouslySetInnerHTML={{ __html: mod.changes }} />
                 <td dangerouslySetInnerHTML={{ __html: mod.originalAuthor }} />
                 <td>
-                  {mod.status === "404" 
-                    ? "No release" 
-                    : <a href={mod.assets[0].browser_download_url} target="_blank" rel="noopener noreferrer">Download</a>}
+                  {mod.assets.length > 0 ? (
+                    <a href={mod.assets[0].browser_download_url} target="_blank" rel="noopener noreferrer">Download</a>
+                  ) : (
+                    "No release"
+                  )}
                 </td>
               </tr>
             ))}
