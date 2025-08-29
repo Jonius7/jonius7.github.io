@@ -19,14 +19,14 @@ export default async function Home() {
     table.map(async (repo) => {
       // Fetch repo info (for description)
       const repoRes = await fetch(
-        `https://api.github.com/repos/${repo.author}/${repo.name}`,
+        `https://api.github.com/repos/${author}/${repo.repo || repo.name}`,
         { next: { revalidate: 3600 } }
       );
       const repoJson = await repoRes.json();
 
       // Fetch latest release
       const relRes = await fetch(
-        `https://api.github.com/repos/${repo.author}/${repo.name}/releases/latest`,
+        `https://api.github.com/repos/${author}/${repo.repo || repo.name}/releases/latest`,
         { next: { revalidate: 3600 } }
       );
       const relJson = await relRes.json();
