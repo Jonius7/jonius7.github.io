@@ -27,7 +27,7 @@ jobs:
       - name: Build and export
         run: |
           npm run build
-          npx next export
+          npm run export
           cp data.json out/data.json
           touch out/.nojekyll
 
