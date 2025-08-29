@@ -14,40 +14,32 @@ const table = [
   { name: "NotEnoughItems (GTNH)", repo: "NotEnoughItems", noBadge: true, changes: "Just <pre>handlers.csv</pre>, no mod work", originalAuthor: "" },
 ];
 
-export default function Home() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function fetchReleases() {
-      const newData = await Promise.all(
-        table.map(async (repo) => {
-          const repoName = repo.repo || repo.name;
-
-          try {
-            const res = await fetch(`https://api.github.com/repos/${author}/${repoName}/releases`);
-            if (!res.ok) return { ...repo, latestVersion: "No release", assets: [] };
-
-            const releases = await res.json();
-            const latest = releases.find(r => !r.prerelease) || null;
-
-            const validAsset = latest?.assets?.find(a => !a.name.includes("-api")) || null;
-
-            return {
-              ...repo,
-              latestVersion: latest ? latest.tag_name : "No release",
-              releaseDate: latest ? latest.published_at : null,
-              assets: validAsset ? [validAsset] : [],
-            };
-          } catch {
-            return { ...repo, latestVersion: "No release", assets: [] };
-          }
-        })
+export default async function Home() {
+  const data = await Promise.all(
+    repos.map(async (repo) => {
+      // Fetch repo info (for description)
+      const repoRes = await fetch(
+        `https://api.github.com/repos/${repo.author}/${repo.name}`,
+        { next: { revalidate: 3600 } }
       );
-      setData(newData);
-    }
+      const repoJson = await repoRes.json();
 
-    fetchReleases();
-  }, []);
+      // Fetch latest release
+      const relRes = await fetch(
+        `https://api.github.com/repos/${repo.author}/${repo.name}/releases/latest`,
+        { next: { revalidate: 3600 } }
+      );
+      const relJson = await relRes.json();
+
+      return {
+        ...repo,
+        description: repoJson.description,
+        status: relRes.status,
+        latestVersion: relJson.tag_name,
+        releaseDate: relJson.published_at,
+      };
+    })
+  );
 
   return (
     <div className="base">
@@ -112,11 +104,9 @@ export default function Home() {
                 <td dangerouslySetInnerHTML={{ __html: mod.changes }} />
                 <td dangerouslySetInnerHTML={{ __html: mod.originalAuthor }} />
                 <td>
-                  {mod.assets.length > 0 ? (
-                    <a href={mod.assets[0].browser_download_url} target="_blank" rel="noopener noreferrer">Download</a>
-                  ) : (
-                    "No release"
-                  )}
+                  {mod.status === "404" 
+                    ? "No release" 
+                    : <a href={mod.assets[0].browser_download_url} target="_blank" rel="noopener noreferrer">Download</a>}
                 </td>
               </tr>
             ))}
