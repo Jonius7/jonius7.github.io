@@ -47,7 +47,7 @@ jobs:
       - name: Build and export
         run: |
           npm run build
-          npx next export
+          npm run export
           # copy data.json into out/ so GitHub Pages can access it
           cp data.json out/data.json
           # prevent GitHub Pages from ignoring files starting with _
