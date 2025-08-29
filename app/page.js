@@ -2,46 +2,21 @@
 
 import { useEffect, useState } from "react";
 
-const author = "Jonius7";
-
 export default function Home() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function loadData() {
       try {
-        // Use relative path for GitHub Pages
-        const res = await fetch("./data.json");
-        if (!res.ok) throw new Error("Failed to fetch data.json");
-
+        const res = await fetch("./data.json"); // relative path in exported site
         const json = await res.json();
         setData(json);
       } catch (err) {
-        console.error("Error loading data.json:", err);
+        console.error("Failed to load data.json", err);
       }
     }
-
-    fetchData();
+    loadData();
   }, []);
-
-  function formatRelativeDate(dateString) {
-    if (!dateString) return "No release";
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHours = Math.floor(diffMin / 60);
-    const diffDays = Math.floor(diffHours / 24);
-    const diffWeeks = Math.floor(diffDays / 7);
-
-    const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-    if (diffWeeks > 6) return rtf.format(-diffWeeks, "week");
-    if (diffDays > 0) return rtf.format(-diffDays, "day");
-    if (diffHours > 0) return rtf.format(-diffHours, "hour");
-    if (diffMin > 0) return rtf.format(-diffMin, "minute");
-    return "just now";
-  }
 
   return (
     <>
@@ -116,8 +91,8 @@ export default function Home() {
                         mod.provider === "CurseForge"
                           ? mod.link
                           : mod.repo
-                          ? `https://github.com/${author}/${mod.repo}`
-                          : `https://github.com/${author}/${mod.name}`
+                          ? `https://github.com/Jonius7/${mod.repo}`
+                          : `https://github.com/Jonius7/${mod.name}`
                       }
                       target="_blank"
                       rel="noopener noreferrer"
@@ -128,7 +103,7 @@ export default function Home() {
                   <td>
                     {!mod.noBadge && (
                       <img
-                        src={`https://img.shields.io/github/v/release/${author}/${mod.repo || mod.name}?display_name=release&label=%20&style=flat-square`}
+                        src={`https://img.shields.io/github/v/release/Jonius7/${mod.repo || mod.name}?display_name=release&label=%20&style=flat-square`}
                         height="27"
                       />
                     )}

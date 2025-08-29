@@ -1,62 +1,38 @@
-# .github/workflows/build-and-deploy.yml
-
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy
 
 on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "0 0 * * *" # optional: daily update
+    - cron: "0 0 * * *"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
       - uses: actions/checkout@v3
-        with:
-          persist-credentials: true
 
-      # 2. Setup Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: 22.x
           cache: 'npm'
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Fetch latest release data
       - name: Fetch releases
         run: node fetchReleases.js
 
-      # 5. Commit updated data.json (optional)
-      - name: Commit updated data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json
-          git diff --cached --quiet || git commit -m "Update release data [skip ci]"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 6. Build and export static site
       - name: Build and export
         run: |
           npm run build
-          npm run export
-          # copy data.json into out/ so GitHub Pages can access it
+          npx next export
           cp data.json out/data.json
-          # prevent GitHub Pages from ignoring files starting with _
           touch out/.nojekyll
 
-      # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: out
-          clean: true
