@@ -89,14 +89,14 @@ export default async function Home() {
             {data.map((mod, i) => (
               <tr key={i}>
                 <td>
-                  <a href={`https://github.com/${author}/${mod.name || mod.repo}`} target="_blank" rel="noopener noreferrer">
+                  <a href={`https://github.com/${author}/${repo.repo ? repo.repo : repo.name}`} target="_blank" rel="noopener noreferrer">
                     {mod.name}
                   </a>
                 </td>
                 <td>
                   {!mod.noBadge && (
                     <img
-                      src={`https://img.shields.io/github/v/release/${author}/${mod.repo || mod.name}?display_name=release&label=%20&style=flat-square`}
+                      src={`https://img.shields.io/github/v/release/${author}/${repo.repo ? repo.repo : repo.name}?display_name=release&label=%20&style=flat-square`}
                       height="27"
                     />
                   )}
