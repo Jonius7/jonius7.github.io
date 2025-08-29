@@ -1,7 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 const author = "Jonius7";
 const table = [
   { name: "MoreBackpacks", originalVersion: "2.2.2", changes: "Updated outdated Forestry API causing crashes", originalAuthor: "Enosphorous, LordBlackHole" },
@@ -17,16 +13,17 @@ const table = [
 export default async function Home() {
   const data = await Promise.all(
     table.map(async (repo) => {
+      const repoName = repo.repo || repo.name
       // Fetch repo info (for description)
       const repoRes = await fetch(
-        `https://api.github.com/repos/${author}/${repo.repo || repo.name}`,
+        `https://api.github.com/repos/${author}/${repoName}`,
         { next: { revalidate: 3600 } }
       );
       const repoJson = await repoRes.json();
 
       // Fetch latest release
       const relRes = await fetch(
-        `https://api.github.com/repos/${author}/${repo.repo || repo.name}/releases/latest`,
+        `https://api.github.com/repos/${author}/${repoName}/releases/latest`,
         { next: { revalidate: 3600 } }
       );
       const relJson = await relRes.json();
