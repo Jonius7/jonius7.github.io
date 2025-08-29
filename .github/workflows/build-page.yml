@@ -1,38 +1,57 @@
 # .github/workflows/build-and-deploy.yml
 
-name: Node.js CI
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main ]
+  schedule:
+    - cron: "0 0 * * *" # optional: run daily at midnight UTC to update releases automatically
 
 jobs:
-  build:
-
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # https://github.com/actions/checkout
+      # Checkout repository
       - uses: actions/checkout@v3
-        
-      # a standard step for GitHub actions on Node
-      # https://github.com/actions/setup-node
+        with:
+          persist-credentials: true
+
+      # Setup Node.js
       - uses: actions/setup-node@v3
         with:
-          # update the Node version to meet your needs
           node-version: 22.x
-          cache: npm
+          cache: 'npm'
 
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Fetch latest release data
+      - name: Fetch releases
+        run: node fetchReleases.js
+
+      # Commit updated data.json back to main
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --cached --quiet || git commit -m "Update release data [skip ci]"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build and export static site
       - name: Build and export
         run: |
-          npm ci
-          node fetchReleases.js
           npm run build
-          npm run export
+          npx next export
           touch out/.nojekyll
 
-      - name: Deploy
-        # https://github.com/JamesIves/github-pages-deploy-action
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
