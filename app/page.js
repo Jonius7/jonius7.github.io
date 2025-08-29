@@ -35,9 +35,9 @@ export default async function Home() {
         ...repo,
         description: repoJson.description,
         status: relJson.status,
-        assets: relJson.assets,
-        latestVersion: relJson.tag_name,
-        releaseDate: relJson.published_at,
+        assets: relJson.assets || [],
+        latestVersion: relJson.tag_name || "No release",
+        releaseDate: relJson.published_at || null,
       };
     })
   );
