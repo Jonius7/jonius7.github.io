@@ -1,7 +1,5 @@
-"use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "next/link"
 
 const author = "Jonius7";
 const table = [
@@ -15,43 +13,34 @@ const table = [
   { name: "NotEnoughItems (GTNH)", repo: "NotEnoughItems", noBadge: true, changes: "Just <pre>handlers.csv</pre>, no mod work", originalAuthor: "" },
 ];
 
-export default function Home() {
-  const [data, setData] = useState(table);
-
-  useEffect(() => {
-    async function fetchData() {
-      const results = await Promise.all(
-        table.map(async (repo) => {
-          const repoName = repo.repo || repo.name;
-
-          try {
-            // Fetch repo info
-            const repoRes = await fetch(`https://api.github.com/repos/${author}/${repoName}`);
-            const repoJson = await repoRes.json();
-
-            // Fetch latest release
-            const relRes = await fetch(`https://api.github.com/repos/${author}/${repoName}/releases/latest`);
-            const relJson = await relRes.json();
-
-            return {
-              ...repo,
-              description: repoJson.description || "",
-              assets: relJson.assets || [],
-              latestVersion: relJson.tag_name || "No release",
-              releaseDate: relJson.published_at || null,
-            };
-          } catch (err) {
-            console.error(`Error fetching ${repoName}:`, err);
-            return { ...repo, description: "", assets: [], latestVersion: "Error" };
-          }
-        })
+export default async function Home() {
+  const data = await Promise.all(
+    table.map(async (repo) => {
+      const repoName = repo.repo || repo.name
+      // Fetch repo info (for description)
+      const repoRes = await fetch(
+        `https://api.github.com/repos/${author}/${repoName}`,
+        { next: { revalidate: 3600 } }
       );
+      const repoJson = await repoRes.json();
 
-      setData(results);
-    }
+      // Fetch latest release
+      const relRes = await fetch(
+        `https://api.github.com/repos/${author}/${repoName}/releases/latest`,
+        { next: { revalidate: 3600 } }
+      );
+      const relJson = await relRes.json();
 
-    fetchData();
-  }, []);
+      return {
+        ...repo,
+        description: repoJson.description,
+        status: relJson.status,
+        assets: relJson.assets || [],
+        latestVersion: relJson.tag_name || "No release",
+        releaseDate: relJson.published_at || null,
+      };
+    })
+  );
 
   return (
     <div className="base">
@@ -71,6 +60,18 @@ export default function Home() {
             src="https://img.shields.io/github/v/release/Jonius7/SteamUI-OldGlory?display_name=release&label=%20%20&style=flat-square"
             height="27"
           />
+        </p>
+
+        <p>
+          <a href="https://www.youtube.com/channel/UCUwcJ5V5F7eGZUbEq3vV-WA" target="_blank" rel="noopener noreferrer">Youtube</a> - Jonius7
+        </p>
+
+        <p>
+          <a href="https://www.youtube.com/watch?v=q16iqgbWRUE" target="_blank" rel="noopener noreferrer">Minecraft</a> - I have bugfixes and updates for Minecraft mods
+        </p>
+
+        <p>
+          <Link href="/minecraft">Keeping Minecraft Mods Updated</Link> - Building a modpack, can use a table format to check when mods are updating
         </p>
 
         <table className="tg">
