@@ -26,6 +26,7 @@ jobs:
       - name: Build and export
         run: |
           npm ci
+          node fetchReleases.js
           npm run build
           npm run export
           touch out/.nojekyll
