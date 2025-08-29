@@ -16,7 +16,7 @@ const table = [
 
 export default async function Home() {
   const data = await Promise.all(
-    repos.map(async (repo) => {
+    table.map(async (repo) => {
       // Fetch repo info (for description)
       const repoRes = await fetch(
         `https://api.github.com/repos/${repo.author}/${repo.name}`,
