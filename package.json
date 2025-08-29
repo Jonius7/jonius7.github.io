@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "export": "next export"    
+    "export": "output: export"    
   },
   "dependencies": {
     "fs": "^0.0.1-security",
