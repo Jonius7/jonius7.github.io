@@ -1,10 +1,15 @@
 self.__BUILD_MANIFEST = {
   "/_error": [
-    "./static/chunks/23e1f6504022ca4d.js"
+    "./static/chunks/db15ec5e4b744d89.js"
   ],
   "__rewrites": {
     "afterFiles": [],
-    "beforeFiles": [],
+    "beforeFiles": [
+      {
+        "source": "/jonius7.github.io//_next/:path+",
+        "destination": "/jonius7.github.io/_next/:path+"
+      }
+    ],
     "fallback": []
   },
   "sortedPages": [
