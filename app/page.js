@@ -191,7 +191,9 @@ export default async function Home() {
                   >
                     {mod.name}
                   </a>
-                    {mod.provider ? <a href={mod.providerLink}><img src="https://media.forgecdn.net/avatars/130/458/636460205549127215.png" height="20" /></a> : null }
+                    {mod.provider ? <a href={mod.providerLink} target="_blank" rel="noopener noreferrer">
+                      <img src="https://media.forgecdn.net/avatars/130/458/636460205549127215.png" height="20" />
+                      </a> : null }
                 </td>
                 <td>
                   {!mod.noBadge && (
