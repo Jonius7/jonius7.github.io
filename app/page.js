@@ -30,6 +30,7 @@ const table = [
     name: "NoMoreRecipeConflict",
     repo: "YetAnotherRecipeConflictFixer",
     provider: "CurseForge",
+    providerLink: "https://www.curseforge.com/minecraft/mc-mods/recipeconflict-fixer",
     link: "https://www.curseforge.com/minecraft/mc-mods/recipeconflict-fixer",
     originalVersion: "0.3",
     changes:
@@ -42,6 +43,12 @@ const table = [
     originalVersion: "02.01.08",
     changes: `Fix <a href="https://github.com/GTNewHorizons/NotEnoughItems/issues/596">java.lang.NoSuchFieldError: children</a>`,
     originalAuthor: "heldplayer",
+  },
+  {
+    name: "FullThrottle Alchemist Fix",
+    repo: "FullThrottleAlchemistFix",
+    changes: `Fix <pre>ModSortingException</pre> caused by FTA shipping with outdated Forestry API`,
+    originalAuthor: "Jonius7",
   },
   {
     name: "Additional Buildcraft Objects",
@@ -184,6 +191,7 @@ export default async function Home() {
                   >
                     {mod.name}
                   </a>
+                    {mod.provider ? <a href={mod.providerLink}><img src="https://media.forgecdn.net/avatars/130/458/636460205549127215.png" height="20" /></a> : null }
                 </td>
                 <td>
                   {!mod.noBadge && (
@@ -200,13 +208,27 @@ export default async function Home() {
                 <td dangerouslySetInnerHTML={{ __html: mod.originalAuthor }} />
                 <td>
                   {mod.assets.length > 0 ? (
-                    <a
-                      href={mod.assets[0].browser_download_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Download
-                    </a>
+                    (() => {
+                      // Filter out unwanted assets
+                      const filteredAssets = mod.assets.filter(
+                        (asset) =>
+                          !asset.name.includes("-dev") &&
+                          !asset.name.includes("-sources") &&
+                          !asset.name.includes("-api")
+                      );
+
+                      if (filteredAssets.length === 0) return "No release";
+
+                      return (
+                        <a
+                          href={filteredAssets[0].browser_download_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Download
+                        </a>
+                      );
+                    })()
                   ) : (
                     "No release"
                   )}
