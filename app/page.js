@@ -16,6 +16,8 @@ const table = [
   },
   {
     name: "MineChem",
+    provider: "CurseForge",
+    providerLink: "https://www.curseforge.com/minecraft/mc-mods/minechem-working-with-better-builders-wands",
     originalVersion: "5.0.5.406",
     changes: `[did not make any changes, just rebuilt latest from Github]<br/>Fix crash with BetterBuildersWands`,
     originalAuthor: "jakimfett",
@@ -31,7 +33,6 @@ const table = [
     repo: "YetAnotherRecipeConflictFixer",
     provider: "CurseForge",
     providerLink: "https://www.curseforge.com/minecraft/mc-mods/recipeconflict-fixer",
-    link: "https://www.curseforge.com/minecraft/mc-mods/recipeconflict-fixer",
     originalVersion: "0.3",
     changes:
       "Fix to work on other mods' Crafting Tables (eg: Tinkers' Construct, Natura)",
