@@ -16,7 +16,9 @@ const repos = [
   { name: "CoreTweaks", author: "GTNewHorizons" },
   { name: "ForestryMC", author: "GTNewHorizons" },
   { name: "NotEnoughEnergistics", author: "GTNewHorizons" },
-  { name: "TinkersConstruct", author: "GTNewHorizons" }
+  { name: "TinkersConstruct", author: "GTNewHorizons" },
+  { name: "Avaritia", author: "GTNewHorizons" },
+  { name: "Avaritiaddons", author: "GTNewHorizons" }
 ];
 
 function formatRelativeDate(dateString) {

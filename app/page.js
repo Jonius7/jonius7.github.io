@@ -59,6 +59,12 @@ const table = [
     originalAuthor: "dae3soul",
   },
   {
+    name: "NuclearCraft",
+    originalVersion: "1.9g",
+    changes: "Fix <pre>CrusherFuelRecipeHandler</pre> running into <pre>ConcurrentModificationException</pre>",
+    originalAuthor: "tomdodd4598",
+  },
+  {
     name: "Faithful32 [Texture Pack]",
     repo: "Faithful32-1.7.10",
     noBadge: true,
