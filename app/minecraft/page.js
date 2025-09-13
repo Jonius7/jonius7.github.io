@@ -17,7 +17,6 @@ const repos = [
   { name: "ForestryMC", author: "GTNewHorizons" },
   { name: "NotEnoughEnergistics", author: "GTNewHorizons" },
   { name: "TinkersConstruct", author: "GTNewHorizons" },
-  { name: "Avaritia", author: "GTNewHorizons" },
   { name: "Avaritiaddons", author: "GTNewHorizons" },
   { name: "BetterQuesting", author: "GTNewHorizons" }
 ];

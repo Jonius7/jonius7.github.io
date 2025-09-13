@@ -25,7 +25,7 @@ const table = [
   {
     name: "Electrodynamics",
     originalVersion: "0.3.5",
-    changes: "Fix crash with IHL Tools & Machines (IC2 Addon)",
+    changes: "Fix crash with IHL Tools & Machines (IC2 Addon)<br/>Fix conflict with Steve's Carts",
     originalAuthor: `Calclavia<br/>leytilera (bugfixes)`,
   },
   {
@@ -55,14 +55,21 @@ const table = [
     name: "Additional Buildcraft Objects",
     repo: "Additional-Buildcraft-Objects",
     originalVersion: "4.0.13",
-    changes: "Fix crash with Geostrata v33",
+    changes: `Fix crash with <a href="https://github.com/da3dsoul/Additional-Buildcraft-Objects/issues/54">Geostrata v33</a>`,
     originalAuthor: "dae3soul",
   },
   {
     name: "NuclearCraft",
     originalVersion: "1.9g",
-    changes: "Fix <pre>CrusherFuelRecipeHandler</pre> running into <pre>ConcurrentModificationException</pre>",
+    changes: `Fix <pre>CrusherFuelRecipeHandler</pre> running into <a href="https://github.com/tomdodd4598/NuclearCraft/issues/830">NEI Errors</a></pre>`,
     originalAuthor: "tomdodd4598",
+  },
+  {
+    name: "Electrical Age",
+    repo: "ElectricalAge",
+    originalVersion: "1.22.3",
+    changes: `Fix <pre>ReplicatorEntity</pre> crashing world on empty drop list`,
+    originalAuthor: "Dolu1990, ElectricalAge team",
   },
   {
     name: "Faithful32 [Texture Pack]",
